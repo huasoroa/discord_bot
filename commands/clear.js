@@ -4,6 +4,8 @@ const {
 module.exports = {
     name: 'clear',
     description: 'Will clear all chat messages in current channel',
+    aliases : ['clr','cl'],
+    guildOnly: true,
     async execute(message, args) {
 
         if (isNaN(args[0])) {
@@ -18,6 +20,7 @@ module.exports = {
                     message.channel.bulkDelete(fetchedMessages)
                 }).catch(error => {
                     console.error(error);
+                    message.reply(`Something went wrong while clearing the channel\n Messages older than 14 days need to be deleted manually`)
                 })
             } while (fetchSize >= 2);
             return message.reply('Channel has been cleared');
