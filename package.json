@@ -4,13 +4,14 @@
   "description": "Making my first Discord bot",
   "main": "index.js",
   "scripts": {
-    "dev" : "nodemon .",
+    "dev": "nodemon .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "huasoroa",
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.5.1",
+    "mongoose": "^5.11.9",
     "nodemon": "^2.0.6"
   }
 }
