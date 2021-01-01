@@ -1,13 +1,30 @@
-const Discord = require('discord.js')
 const fs = require('fs')
 const path = require('path')
-const config = require('./config.json')
+
+// Packages needed for this to work
+const Discord = require('discord.js')
 const mongoose = require('mongoose')
+const Twitter = require('twit')
+
+// Instantiating Discord Client/Bot
 const client = new Discord.Client({
     partials: ['MESSAGE', 'REACTION', 'CHANNEL', 'USER']
 });
 
-const prefix = config.prefix || '-';
+// Preparing Twitter configuration needed for twit.js
+const twitConf = {
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret : process.env.TWITTER_CONSUMER_SECRET,
+    access_token : process.env.TWITTER_ACCESS_TOKEN_KEY,
+    access_token_secret : process.env.TWITTER_ACCESS_TOKEN_SECRET,
+}
+
+// Channel to provide logs
+const logsChannel_id = process.env.DISCORD_LOG_CHANNEL_ID
+
+// Prefix for your commands
+const prefix = process.env.DISCORD_PREFIX || '-';
+
 // Role Id's
 const belgian = '785170330725122098'
 const morrocan = '785170503832436749'
@@ -24,7 +41,7 @@ const bijoClub = '785175195975417857'
 
 client.commands = new Discord.Collection();
 
-
+// Used to provide cooldowns on your commands
 const cooldowns = new Discord.Collection();
 
 function registerCommands(dir = 'commands') {
@@ -52,11 +69,13 @@ function registerCommands(dir = 'commands') {
 }
 
 client.on('ready', () => {
+    // Make the connection to MongoDB 
     mongoose.connect('mongodb+srv://admin:0ePdvSQ4r7GXOA6TogMp@cluster0.rsgmx.mongodb.net/discord?retryWrites=true&w=majority',{
     useNewUrlParser: true,
     useUnifiedTopology : true,
 }).catch(err => {console.error(error)})
 console.log('Connected to database.')
+    // Recursively find every command
     registerCommands()
     console.log(`"${client.user.tag}" has loaded correctly.`)
 })
@@ -136,7 +155,7 @@ client.on('messageReactionRemove', (reaction, user) => {
         if (!member.roles.cache.has('783744116198342686')) {
             member.roles.add('783744116198342686');
         }
-        let logsChannel = reaction.message.guild.channels.cache.get('783744838293913610')
+        let logsChannel = client.channels.cache.get(logsChannel_id)
         switch (reaction.emoji.name) {
             case '🧇':
                 member.roles.remove(belgian)
@@ -173,7 +192,7 @@ client.on('messageReactionRemove', (reaction, user) => {
     } else if (reaction.message.id === '793510333515563038') {
         if (!member.roles.cache.has('783744168903180338'))
             member.roles.add('783744168903180338')
-        let logsChannel = reaction.message.guild.channels.cache.get('783744838293913610')
+        let logsChannel = client.channels.cache.get(logsChannel_id)
         switch (reaction.emoji.name) {
             case '🔴':
                 member.roles.remove(hetero)
@@ -202,7 +221,7 @@ client.on('messageReactionAdd', (reaction, user) => {
         if (!member.roles.cache.has('783744116198342686')) {
             member.roles.add('783744116198342686');
         }
-        let logsChannel = reaction.message.guild.channels.cache.get('783744838293913610')
+        let logsChannel = client.channels.cache.get(logsChannel_id)
         switch (reaction.emoji.name) {
             case '🧇':
                 member.roles.add(belgian)
@@ -233,13 +252,13 @@ client.on('messageReactionAdd', (reaction, user) => {
                 logsChannel.send(`<@${user.id}> has been added to the <@&${italian}>`)
                 break;
             default:
-                console.log('WLH jai pas compris')
+                console.log(`The ${reaction.emoji} is not part of the selected roles.`)
                 break;
         }
     }else if (reaction.message.id === '793510333515563038') {
         if (!member.roles.cache.has('783744168903180338'))
             member.roles.add('783744168903180338')
-        let logsChannel = reaction.message.guild.channels.cache.get('783744838293913610')
+        let logsChannel = client.channels.cache.get(logsChannel_id)
         switch (reaction.emoji.name) {
             case '🔴':
                 member.roles.add(hetero)
@@ -254,9 +273,9 @@ client.on('messageReactionAdd', (reaction, user) => {
                 logsChannel.send(`<@${user.id}> has been added to the <@&${nonBinary}>`)
                 break;
             default:
-                console.log('Not part of the roles')
+                console.log(`The ${reaction.emoji} is not part of the selected roles`)
                 break;
         }
     }
 })
-client.login(config.token)
+client.login(process.env.DISCORD_TOKEN)
