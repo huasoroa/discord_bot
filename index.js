@@ -1,11 +1,13 @@
 const Discord = require('discord.js')
 const fs = require('fs')
-const config = require('config.json')
+const path = require('path')
+const config = require('./config.json')
+const mongoose = require('mongoose')
 const client = new Discord.Client({
     partials: ['MESSAGE', 'REACTION', 'CHANNEL', 'USER']
 });
 
-const prefix = config.json || '-';
+const prefix = config.prefix || '-';
 // Role Id's
 const belgian = '785170330725122098'
 const morrocan = '785170503832436749'
@@ -25,16 +27,38 @@ client.commands = new Discord.Collection();
 
 const cooldowns = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'))
-
-for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-
-    client.commands.set(command.name, command)
+function registerCommands(dir = 'commands') {
+    //Read the directory/file.
+    const files = fs.readdirSync(path.join(__dirname, dir))
+    // Loop through each file.
+    for (const file of files) {
+        const stat = fs.lstatSync(path.join(__dirname, dir, file))
+        if(stat.isDirectory()) //If file is a directory
+            registerCommands(path.join(dir,file))
+            else {
+                // Check if file is a .js file
+                if (file.endsWith(".js")) {
+                    try {
+                        const cmdName = file.substring(0, file.indexOf('.js'))
+                        const cmdModule = require(path.join(__dirname, dir, file))
+                        client.commands.set(cmdName, cmdModule)
+                        console.log(`Registering Command "${cmdName}".`)
+                    } catch (error) {
+                        console.error(error)
+                    }
+                }
+            }
+    }
 }
 
 client.on('ready', () => {
-    console.log('Client is ready ! <3')
+    mongoose.connect('mongodb+srv://admin:0ePdvSQ4r7GXOA6TogMp@cluster0.rsgmx.mongodb.net/discord?retryWrites=true&w=majority',{
+    useNewUrlParser: true,
+    useUnifiedTopology : true,
+}).catch(err => {console.error(error)})
+console.log('Connected to database.')
+    registerCommands()
+    console.log(`"${client.user.tag}" has loaded correctly.`)
 })
 
 client.on('message', message => {

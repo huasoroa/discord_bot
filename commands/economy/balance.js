@@ -1,11 +1,5 @@
 const mongoose = require('mongoose')
-const { execute } = require('../clear')
-const UserDataModel = require('./models/userDataModel')
-
-mongoose.connect('mongodb+srv://admin:0ePdvSQ4r7GXOA6TogMp@cluster0.rsgmx.mongodb.net/discord?retryWrites=true&w=majority',{
-    useNewUrlParser: true,
-    useUnifiedTopology : true,
-})
+const UserData = require('../../models/userDataModel')
 
 module.exports = {
     name : 'balance',
@@ -13,6 +7,22 @@ module.exports = {
     aliases : ['bal'],
     guildOnly: true,
     async execute(message,args) {
-        message.author.id
+        UserData.findOne({user_id: message.author.id}, (err, data) => {
+            if(err) console.log(err);
+            if(!data) {
+                const newData = new UserData({
+                    name : message.author.username,
+                    user_id : message.author.id,
+                    guild_id : message.guild.id,
+                    money : 0,
+                    daily : 0, 
+                })
+                newData.save().catch(err => console.error(err))
+                return message.channel.send(`<@${message.author.id}> has **0€**`)
+            } else {
+                return message.channel.send(`<@${message.author.id}> has **${data.money}€**`)
+            }
+        })
+        
     }
 }
