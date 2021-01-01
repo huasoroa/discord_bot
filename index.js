@@ -69,6 +69,21 @@ function registerCommands(dir = 'commands') {
 }
 
 client.on('ready', () => {
+    // Instantiate the Twitter API 
+    const twit = new Twitter(twitConf)
+
+    // Create a stream to follow on twitter
+    const stream = twit.stream('statuses/filter',{
+        follow : '', // Follow the twitter account ID
+    })
+    // ID of the streaming channel
+    const destinationChannel = ''
+
+    stream.on('tweet', tweet => {
+        const twitterMessage = `${tweet.user.name} (@${tweet.user.screen_name}) tweeted this: https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`
+        client.channels.get(dest).send(twitterMessage);
+        return false;
+      });
     // Make the connection to MongoDB 
     mongoose.connect('mongodb+srv://admin:0ePdvSQ4r7GXOA6TogMp@cluster0.rsgmx.mongodb.net/discord?retryWrites=true&w=majority',{
     useNewUrlParser: true,
