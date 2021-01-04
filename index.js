@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+require('dotenv').config()
 
 // Packages needed for this to work
 const Discord = require('discord.js')
@@ -11,7 +12,7 @@ const client = new Discord.Client({
     partials: ['MESSAGE', 'REACTION', 'CHANNEL', 'USER']
 });
 
-// Preparing Twitter configuration needed for twit.js
+// Preparing Twitter configuration needed for twit
 const twitConf = {
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret : process.env.TWITTER_CONSUMER_SECRET,
@@ -69,21 +70,21 @@ function registerCommands(dir = 'commands') {
 }
 
 client.on('ready', () => {
-    // Instantiate the Twitter API 
-    const twit = new Twitter(twitConf)
+    // // Instantiate the Twitter API 
+    // const twit = new Twitter(twitConf)
 
-    // Create a stream to follow on twitter
-    const stream = twit.stream('statuses/filter',{
-        follow : '', // Follow the twitter account ID
-    })
-    // ID of the streaming channel
-    const destinationChannel = ''
+    // // Create a stream to follow on twitter
+    // const stream = twit.stream('statuses/filter',{
+    //     follow : '', // Follow the twitter account ID
+    // })
+    // // ID of the streaming channel
+    // const destinationChannel = ''
 
-    stream.on('tweet', tweet => {
-        const twitterMessage = `${tweet.user.name} (@${tweet.user.screen_name}) tweeted this: https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`
-        client.channels.get(dest).send(twitterMessage);
-        return false;
-      });
+    // stream.on('tweet', tweet => {
+    //     const twitterMessage = `${tweet.user.name} (@${tweet.user.screen_name}) tweeted this: https://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`
+    //     client.channels.get(dest).send(twitterMessage);
+    //     return false;
+    //   });
     // Make the connection to MongoDB 
     mongoose.connect('mongodb+srv://admin:0ePdvSQ4r7GXOA6TogMp@cluster0.rsgmx.mongodb.net/discord?retryWrites=true&w=majority',{
     useNewUrlParser: true,

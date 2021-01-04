@@ -1,8 +1,8 @@
 module.exports = {
     name: 'ping',
-    description : 'This is a ping command, Useful for testing',
+    description : 'This is a ping command, used to find out the bot latency',
     guildOnly: false,
     execute(message,args){
-        message.channel.send('Va tester autre part chien de la casse')
+        message.channel.send(`Latency is ${Date.now() - message.createdTimestamp}ms. `)
     }
 }

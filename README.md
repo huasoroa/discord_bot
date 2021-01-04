@@ -13,3 +13,5 @@ it currently doesn't have a name as I don't plan to make it available to the gen
 - Adding chatbot functionality.
 - Music streaming possibility.
 - Adding ping and latency commands.
+- Setup reaction-to-role message dynamically.
+- Setup logging channel per guild.

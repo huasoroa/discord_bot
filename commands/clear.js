@@ -9,14 +9,13 @@ module.exports = {
     async execute(message, args) {
 
         if (isNaN(args[0])) {
-            console.log('isNan has been done')
             if (args[0] !== 'all') return message.reply('Please enter an actual number or *all*');
             let fetchSize
             do {
                 console.log('Messages are being cleared')
                 message.channel.messages.fetch().then( fetchedMessages => {
                     fetchSize = fetchedMessages.size
-                    console.log(`We have received ${fetchSize}`)
+                    console.log(`We have received ${fetchSize} messages to clear.`)
                     message.channel.bulkDelete(fetchedMessages)
                 }).catch(error => {
                     console.error(error);
