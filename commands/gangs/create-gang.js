@@ -8,7 +8,14 @@ module.exports = {
         if(args[0].startsWith('#')) return message.reply('The hexcolor should be passed as second argument')
         const argument = args.join(" ")
         const firstPart = argument.indexOf('"');
-        if(firstPart !== 1) return message.reply('You need to start your gang-name with *"*')
+        if(firstPart !== 0) return message.reply('You need to start/end your gang-name with *"*')
+        const lastPart = argument.lastIndexOf('"')
+        const gangName = argument.substring(firstPart+1,lastPart)
+        const startHex = argument.indexOf('#')
+        const hexColor = argument.substring(startHex)
+        console.log(hexColor)
+        console.log(gangName)
         
+
     }
 }

@@ -91,7 +91,7 @@ client.on('ready', () => {
     useUnifiedTopology : true,
 }).catch(err => {console.error(error)})
 console.log('Connected to database.')
-    // Recursively find every command
+    // Finds all the commands inside the command folder
     registerCommands()
     console.log(`"${client.user.tag}" has loaded correctly.`)
 })
