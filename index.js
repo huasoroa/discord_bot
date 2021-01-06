@@ -89,7 +89,7 @@ client.on('ready', () => {
     mongoose.connect('mongodb+srv://admin:0ePdvSQ4r7GXOA6TogMp@cluster0.rsgmx.mongodb.net/discord?retryWrites=true&w=majority',{
     useNewUrlParser: true,
     useUnifiedTopology : true,
-}).catch(err => {console.error(error)})
+}).catch(err => {console.error(err)})
 console.log('Connected to database.')
     // Finds all the commands inside the command folder
     registerCommands()

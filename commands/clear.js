@@ -7,9 +7,10 @@ module.exports = {
     aliases : ['clr','cl'],
     guildOnly: true,
     async execute(message, args) {
+        if(!message.member.hasPermission('MANAGE_MESSAGES')) return message.reply(`You don't have the permissions needed for this command.`) 
 
         if (isNaN(args[0])) {
-            if (args[0] !== 'all') return message.reply('Please enter an actual number or *all*');
+            if (args[0] !== 'all' || typeof(args[0]) == 'undefined') return message.reply('Please enter an actual number or *all*');
             let fetchSize
             do {
                 console.log('Messages are being cleared')

@@ -16,6 +16,5 @@ module.exports = {
         console.log(hexColor)
         console.log(gangName)
         
-
     }
 }
