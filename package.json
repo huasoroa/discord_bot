@@ -12,9 +12,11 @@
   "dependencies": {
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
+    "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "mongoose": "^5.11.9",
     "nodemon": "^2.0.6",
-    "twit": "^2.2.11"
+    "twit": "^2.2.11",
+    "uniqid": "^5.2.0"
   }
 }

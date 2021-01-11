@@ -16,6 +16,7 @@ userDataModel = mongoose.Schema({
     money : Number,
     daily : Number,
     items : Array,
+    casino : Boolean,
     
 })
 

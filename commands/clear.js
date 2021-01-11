@@ -14,7 +14,7 @@ module.exports = {
             let fetchSize
             do {
                 console.log('Messages are being cleared')
-                message.channel.messages.fetch().then( fetchedMessages => {
+                await message.channel.messages.fetch().then( fetchedMessages => {
                     fetchSize = fetchedMessages.size
                     console.log(`We have received ${fetchSize} messages to clear.`)
                     message.channel.bulkDelete(fetchedMessages)
