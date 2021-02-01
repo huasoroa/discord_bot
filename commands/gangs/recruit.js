@@ -12,9 +12,9 @@ module.exports = {
         if (typeof(args[1]) == 'undefined') return message.reply('You need to mention the role/gang you want add the user to.') 
         const targetUser = message.mentions.users.first();
         if(typeof(targetUser) == 'undefined') return message.reply('You must specify a user as first argument *@username*')
-        // Check if a Role has been mentioned
+        // Retrieve the first mentioned role
         const targetRole = message.mentions.roles.first();
-        // Get the id from the Role argument 
+        // Check if the role has a value if it doesn't it means that a role hasn't been identified. 
         if(typeof(targetRole) == 'undefined') return message.reply('You need to mention the role/gang you want to add the user to.');
         // If the user isn't the Chief of the group he can't manage it.
         if (!message.author.roles.has(roleId)) return message.reply('You need to be part of the group you want to recruit for.')
@@ -27,10 +27,11 @@ module.exports = {
                 .then( collected => {
                     const reacted = collected.first();
                     if (reacted.emoji.name === '👍') {
-                        
+                        user.roles.add(targetRole)
+                        return message.reply(`${targetUser} has been added to your gang.`)
                     }
                     else {
-                        
+                        return message.reply(`${targetUser} refused to enter your gang.`)
                     }
                 })
         })

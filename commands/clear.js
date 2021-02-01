@@ -1,6 +1,3 @@
-const {
-    Channel
-} = require("discord.js");
 module.exports = {
     name: 'clear',
     description: 'Will clear all chat messages in current channel',

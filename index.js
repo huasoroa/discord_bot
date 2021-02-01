@@ -1,6 +1,6 @@
+require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
-require('dotenv').config()
 
 // Packages needed for this to work
 const Discord = require('discord.js')
@@ -289,7 +289,7 @@ client.on('messageReactionAdd', (reaction, user) => {
                 logsChannel.send(`<@${user.id}> has been added to the <@&${nonBinary}>`)
                 break;
             default:
-                console.log(`The ${reaction.emoji} is not part of the selected roles`)
+                console.log(`The ${reaction.emoji.name} is not part of the selected roles`)
                 break;
         }
     }

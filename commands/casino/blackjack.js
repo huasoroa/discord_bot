@@ -1,9 +1,6 @@
 const UserData = require('../../models/userDataModel')
 const _ = require('lodash')
 const uniq = require('uniqid')
-const {
-    toNumber
-} = require('lodash')
 
 module.exports = {
     name: 'blackjack',
@@ -11,12 +8,7 @@ module.exports = {
     description: 'You are playing the game of Blackjack. If you dont know the rules feel free to go to \n',
     guildOnly: true,
     async execute(message, args) {
-
-        let start = false
         let playerList = [message.author]
-        const gameId = uniq()
-        const filter = m => (m.content.includes(`-join ${gameId}`) && !playerList.includes(m.author)) || (m.content.includes(`-start ${gameId}`) && m.author.id === message.author.id)
-        let counter = 0
         await message.channel.send(`A game of blackjack has been started, You have 10 seconds to join the game type \n\`-join ${gameId}\`\n or ${message.author} type\n\`-start ${gameId}\` to start the game.`)
             .then(async sentMsg => {
                 while (!start && counter < 5) {
@@ -226,7 +218,7 @@ function getCardsValue(playerCards) {
             cardsValue += 10
         } else if (!isNaN(card[0])) {
             card_number = card.match(/(\d+)/);
-            cardsValue += toNumber(card_number[0])
+            cardsValue += _.toNumber(card_number[0])
         } else if (card.startsWith('A')) {
             if (cardsValue + 11 > 21) {
                 cardsValue += 1;
@@ -237,3 +229,30 @@ function getCardsValue(playerCards) {
 }
 
 let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+function gameInit(message, args){
+    const game_id = uniq();
+    const join_ = `-join ${game_id}`
+    const start_ = `-start ${game_id}`
+
+    await message.channel.send(`${message.author} has started a game of blackjack. If you wish to join the game type \n\`${join_}\`\n${message.author}, if you wish to start the game type\n\`${start_}\``)
+    
+}
+
+function checkForPlayer(join_msg,start_msg,message){
+    const filter = m => (m.content.includes(`${join_msg}`) && !playerList.includes(m.author)) || (m.content.includes(`${start_msg}`) && m.author.id === message.author.id)
+    let players = [message.author]
+    let launch_game = false;
+    message.channel.awaitMessages(filter, {max: 1, time:1000,error:['time']})
+    .then(collected => {
+        const response = collected.first();
+        if (response.content.includes(join_msg)) {
+            players.push(players.author)
+        } else {
+            return players
+        }
+    })
+    .catch( collected => {
+        checkForPlayer(join_msg,start_msg,message)
+    })
+}
