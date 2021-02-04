@@ -230,7 +230,7 @@ function getCardsValue(playerCards) {
 
 let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-function gameInit(message, args){
+async function gameInit(message, args){
     const game_id = uniq();
     const join_ = `-join ${game_id}`
     const start_ = `-start ${game_id}`
