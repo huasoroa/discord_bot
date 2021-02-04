@@ -19,7 +19,7 @@ module.exports = {
         // If the user isn't the Chief of the group he can't manage it.
         if (!message.author.roles.has(roleId)) return message.reply('You need to be part of the group you want to recruit for.')
         message.channel.send(`${targetUser}, Do you wish to join ${targetRole}? YES - :thumbsup: NO - :thumbsdown:`)
-        .then(ask => {
+        .then(async ask => {
             await ask.react('👍')
             await ask.react('👎')
             const filter = (reaction, user) => ['👍','👎'].includes(reaction.emoji.name) && user.id === targetUser.id
